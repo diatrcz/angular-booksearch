@@ -1,0 +1,7 @@
+<div *ngIf="bookDetails" class="book-details-container">
+  <h2>{{ bookDetails?.title }}</h2>
+  <p *ngIf="bookDetails?.author?.length">Szerző: <span *ngFor="let author of bookDetails.author">{{ author.name }}</span></p>
+  <p *ngIf="bookDetails?.firstPublishYear">Első kiadás éve: {{ bookDetails.firstPublishYear }}</p>
+  <p *ngIf="bookDetails?.publisher">Kiadó: {{ bookDetails.publisher }}</p>
+  <p *ngIf="bookDetails?.description">{{ bookDetails.description }}</p>
+</div>
