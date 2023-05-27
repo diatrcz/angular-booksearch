@@ -11,7 +11,7 @@
       <img *ngIf="book.coverId" [src]="'https://covers.openlibrary.org/b/id/' + book.coverId + '-L.jpg'" alt="Borítókép">
       <div class="book-details">
         <h3>{{ book.title }}</h3>
-        <p *ngIf="book.author.length > 0">Szerző: <span *ngFor="let author of book.author">{{ author.name }}</span></p>
+        <p *ngIf="book.authorName">Szerző: <span *ngFor="let author of book.authorName">{{ book.authorName }}</span></p>
         <p *ngIf="book.firstPublishYear">Első kiadás éve: {{ book.firstPublishYear }}</p>
         <p *ngIf="book.publisher">Kiadó: {{ book.publisher }}</p>
         <p *ngIf="book.description">{{ book.description }}</p>

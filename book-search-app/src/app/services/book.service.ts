@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BookService {
+
   private apiUrl = 'https://openlibrary.org';
 
   constructor(private http: HttpClient) { }
@@ -15,8 +16,13 @@ export class BookService {
     return this.http.get(url);
   }
 
-  getBookDetails(key: string): Observable<any> {
-    const url = `${this.apiUrl}${key}.json`;
+  getBookDetails(bookKey: string): Observable<any> {
+    const url = `${this.apiUrl}${bookKey}.json`;
+    return this.http.get(url);
+  }
+
+  getAuthorDetails(authorKey: string) {
+    const url = `${this.apiUrl}${authorKey}.json`;
     return this.http.get(url);
   }
 }

@@ -1,7 +1,21 @@
-<div *ngIf="bookDetails" class="book-details-container">
-  <h2>{{ bookDetails?.title }}</h2>
-  <p *ngIf="bookDetails?.author?.length">Szerző: <span *ngFor="let author of bookDetails.author">{{ author.name }}</span></p>
-  <p *ngIf="bookDetails?.firstPublishYear">Első kiadás éve: {{ bookDetails.firstPublishYear }}</p>
-  <p *ngIf="bookDetails?.publisher">Kiadó: {{ bookDetails.publisher }}</p>
-  <p *ngIf="bookDetails?.description">{{ bookDetails.description }}</p>
+<div *ngIf="bookDetails">
+  <img *ngIf="bookDetails.coverId" [src]="'https://covers.openlibrary.org/b/id/' + bookDetails.coverId + '-L.jpg'" alt="Borítókép">
+  <h2>{{ bookDetails.title }}</h2>
+  <div *ngIf="authors.length > 0">
+    <h3>Authors</h3>
+    <ul>
+      <li *ngFor="let author of authors">
+        <a href="{{ author.link }}" target="_blank">{{ author.name }}</a>
+      </li>
+    </ul>
+  </div>
+  <p>First Published: {{ bookDetails.firstPublishYear }}</p>
+  <p>Publisher: {{ bookDetails.publisher }}</p>
+  <p>Description: {{ bookDetails.description }}</p>
+</div>
+
+
+
+<div *ngIf="!bookDetails && authors.length === 0">
+  <p>Loading...</p>
 </div>

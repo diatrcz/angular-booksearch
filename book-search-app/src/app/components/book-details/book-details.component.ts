@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../services/book.service';
-import { Book } from '../../models/book.type';
+import { Book, Author } from '../../models/book.type';
 
 @Component({
   selector: 'app-book-details',
@@ -11,34 +11,56 @@ import { Book } from '../../models/book.type';
 export class BookDetailsComponent implements OnInit {
   bookKey: string = '';
   bookDetails: Book | undefined;
+  authors: Author[] = [];
 
   constructor(private route: ActivatedRoute, private bookService: BookService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.bookKey = params.get('bookKey') || '';
-      this.fetchBookDetails();
+      this.getBookDetails();
     });
   }
 
-  fetchBookDetails(): void {
-    if (this.bookKey !== undefined) {
-      this.bookService.getBookDetails(this.bookKey).subscribe(response => {
-        console.log('API Response:', response);
-        this.bookDetails = this.toBook(response);
+  getBookDetails(): void {
+    this.bookService.getBookDetails(this.bookKey)
+      .subscribe(book => {
+        this.bookDetails = this.toBook(book);
+        console.log(this.bookDetails);
+        this.bookDetails.authorKey?.forEach(authorKey => {
+          this.getAuthorDetails(authorKey);
+        });
       });
-    }
+
+      
   }
 
   private toBook(data: any): Book {
+    const authorKeys = data.authors ? data.authors.map((author: any) => author.author.key) : [];
+  
     return {
       key: data.key,
       title: data.title,
-      author: data.author_name ? data.author_name.map((name: string) => ({ name, link: '' })) : [],
+      authorKey: authorKeys,
+      authorName: [],
       firstPublishYear: data.first_publish_year,
       publisher: data.publisher ? data.publisher[0] : '',
-      coverId: data.cover_i,
+      coverId: data.covers && data.covers[0] ? data.covers[0] : '',
       description: data.description
     };
   }
+
+  getAuthorDetails(authorKey: string) : void {
+    this.bookService.getAuthorDetails(authorKey)
+    .subscribe(author => { 
+      let authorTmp = author;
+      this.authors.push(this.toAuthor(authorTmp));
+     });
+  }
+
+  private toAuthor(data: any): Author {
+    const link = data.links && data.links[0] ? data.links[0].url : '';
+    return { key: data.key, name: data.name, link };
+  }
+  
 }
