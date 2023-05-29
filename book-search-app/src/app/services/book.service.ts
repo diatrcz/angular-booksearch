@@ -7,22 +7,32 @@ import { Observable } from 'rxjs';
 })
 export class BookService {
 
-  private apiUrl = 'https://openlibrary.org';
+  private url = 'https://openlibrary.org';
 
   constructor(private http: HttpClient) { }
 
   searchBooks(query: string): Observable<any> {
-    const url = `${this.apiUrl}/search.json?q=${query}`;
+    const url = `${this.url}/search.json?q=${query}`;
     return this.http.get(url);
   }
 
   getBookDetails(bookKey: string): Observable<any> {
-    const url = `${this.apiUrl}${bookKey}.json`;
+    const url = `${this.url}${bookKey}.json`;
     return this.http.get(url);
   }
 
   getAuthorDetails(authorKey: string) {
-    const url = `${this.apiUrl}${authorKey}.json`;
+    const url = `${this.url}${authorKey}.json`;
+    return this.http.get(url);
+  }
+
+  getRatings(bookKey: string) { 
+    const url = `${this.url}${bookKey}/ratings.json`;
+    return this.http.get(url);
+  }
+
+  getBookshelfDetails(bookKey: string) { 
+    const url = `${this.url}${bookKey}/bookshelves.json`;
     return this.http.get(url);
   }
 }

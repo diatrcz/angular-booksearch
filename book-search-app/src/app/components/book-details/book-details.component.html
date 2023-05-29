@@ -9,13 +9,31 @@
       </li>
     </ul>
   </div>
-  <p>First Published: {{ bookDetails.firstPublishYear }}</p>
-  <p>Publisher: {{ bookDetails.publisher }}</p>
   <p>Description: {{ bookDetails.description }}</p>
+  <p>Subject Places: {{ bookDetails.subject_places?.join(', ') }}</p>
+  <p>Subjects: {{ bookDetails.subjects?.join(', ') }}</p>
+  <p>Subject People: {{ bookDetails.subject_people?.join(', ') }}</p>
+  <p>Subject Times: {{ bookDetails.subject_times?.join(', ') }}</p>
+
+  <div *ngIf="ratings">
+    <h3>Ratings</h3>
+    <p>Average: {{ ratings.summary.average }}</p>
+    <p>Count: {{ ratings.summary.count }}</p>
+    <ul>
+      <li *ngFor="let rating of ratings.counts | keyvalue">
+        {{ rating.key }} Stars: {{ rating.value }}
+      </li>
+    </ul>
+  </div>
 </div>
 
+<div *ngIf="bookshelf">
+  <h3>Bookshelf</h3>
+  <p>Want to Read: {{ bookshelf.want_to_read }}</p>
+  <p>Currently Reading: {{ bookshelf.currently_reading }}</p>
+  <p>Already Read: {{ bookshelf.already_read }}</p>
+</div>
 
-
-<div *ngIf="!bookDetails && authors.length === 0">
+<div *ngIf="!bookDetails && authors.length === 0 && !bookshelf && !ratings">
   <p>Loading...</p>
 </div>

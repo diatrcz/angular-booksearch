@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BookService } from '../../services/book.service';
 import { Router } from '@angular/router';
-import { Book, Author } from '../../models/book.type';
+import { Book } from '../../models/book.type';
 
 @Component({
   selector: 'app-book-list',
@@ -32,7 +32,6 @@ export class BookListComponent {
     return {
       key: data.key,
       title: data.title,
-      authorKey: [],
       authorName: data.author_name || [],
       firstPublishYear: data.first_publish_year,
       publisher: data.publisher ? data.publisher[0] : '',
