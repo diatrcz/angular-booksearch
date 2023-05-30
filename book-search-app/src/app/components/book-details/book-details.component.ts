@@ -48,16 +48,21 @@ export class BookDetailsComponent implements OnInit {
   private toBook(data: any): BookDetails {
     const authorKeys = data.authors ? data.authors.map((author: any) => author.author.key) : [];
 
-    let description = data.description || '';
+    let description = '';
 
-    const sourceIndex = description.indexOf('([source]');
-    const containsIndex = description.indexOf('Contains');
+    if (typeof data.description === 'string') {
+      description = data.description;
+      const sourceIndex = description.indexOf('([source]');
+      const containsIndex = description.indexOf('Contains');
+      
+      if (sourceIndex !== -1) {
+        description = description.slice(0, sourceIndex);
+      } 
+      else if (containsIndex !== -1) {
+        description = description.slice(0, containsIndex);
+      }
 
-    if (sourceIndex !== -1) {
-      description = description.slice(0, sourceIndex);
-    } 
-    else if (containsIndex !== -1) {
-      description = description.slice(0, containsIndex);
+      description.trim();
     }
   
     return {
@@ -65,7 +70,7 @@ export class BookDetailsComponent implements OnInit {
       title: data.title,
       authorKey: authorKeys,
       coverId: data.covers && data.covers[0] ? data.covers[0] : '',
-      description: description.trim(),
+      description: description,
       subject_places: data.subject_places,
       subjects: data.subjects,
       subject_people: data.subject_people,
@@ -125,4 +130,9 @@ export class BookDetailsComponent implements OnInit {
       this.bookshelf = this.toBookshelf(bookshelf);
     });
   }
+
+  getArrayFromNumber(num: number): any[] {
+    return Array(num).fill(0);
+  }
+  
 }

@@ -1,39 +1,69 @@
-<div *ngIf="bookDetails">
-  <img *ngIf="bookDetails.coverId" [src]="'https://covers.openlibrary.org/b/id/' + bookDetails.coverId + '-L.jpg'" alt="Borítókép">
-  <h2>{{ bookDetails.title }}</h2>
-  <div *ngIf="authors.length > 0">
-    <h3>Authors</h3>
-    <ul>
-      <li *ngFor="let author of authors">
-        <a href="{{ author.link }}" target="_blank">{{ author.name }}</a>
-      </li>
-    </ul>
-  </div>
-  <p>Description: {{ bookDetails.description }}</p>
-  <p>Subject Places: {{ bookDetails.subject_places?.join(', ') }}</p>
-  <p>Subjects: {{ bookDetails.subjects?.join(', ') }}</p>
-  <p>Subject People: {{ bookDetails.subject_people?.join(', ') }}</p>
-  <p>Subject Times: {{ bookDetails.subject_times?.join(', ') }}</p>
+<nav class="flex items-center justify-between bg-pink-300 py-2 px-3 h-16">
+  <div class="flex items-center justify-center flex-shrink-0 text-white mr-4">
+    <span class="font-semibold text-lg tracking-tight text-center pl-5">Library</span>
+  </div>  
+</nav>
 
-  <div *ngIf="ratings">
-    <h3>Ratings</h3>
-    <p>Average: {{ ratings.summary.average }}</p>
-    <p>Count: {{ ratings.summary.count }}</p>
-    <ul>
-      <li *ngFor="let rating of ratings.counts | keyvalue">
-        {{ rating.key }} Stars: {{ rating.value }}
-      </li>
-    </ul>
+<div *ngIf="bookDetails" class="flex m-4 bg-white rounded-lg shadow-md p-14 m-10">
+  <div class="w-1/3">
+    <div>
+      <img *ngIf="bookDetails.coverId" [src]="'https://covers.openlibrary.org/b/id/' + bookDetails.coverId + '-L.jpg'" alt="coverImage" class="card-image pl-4">
+    </div>
+  </div>
+  <div class="w-2/3 ml-10">
+    <div>
+      <h2 class="text-2xl font-bold text-pink-500">{{ bookDetails.title }}</h2>
+      <div *ngIf="authors.length > 0" class="mt-4 flex flex-row justify-start">
+          <div *ngFor="let author of authors">
+            <a *ngIf="author.link" [href]="author.link" target="_blank" class="text-pink-300 hover:underline mr-3">{{ author.name }}</a>
+            <span *ngIf="!author.link" class="mr-3">{{ author.name }}</span>
+          </div>
+      </div>
+      <div *ngIf="ratings" class="mt-4">
+        <div class="rating-container">
+          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            <mat-icon class="star-icon" [ngClass]="{ 'filled': star <= ratings.summary.average }">star</mat-icon>
+          </ng-container>
+        </div>
+      </div>
+      <div *ngIf="bookshelf" class="mt-4">
+        <div class="flex flex-row justify-around m-auto flex m-4 bg-pink-200 rounded-lg pt-4">
+          <div class="flex flex-col text-center">
+            <p class="text-bg-zinc-600">Want to Read</p>
+            <p class="text-bg-zinc-600">{{ bookshelf.want_to_read }}</p>
+          </div>
+          <div class="flex flex-col text-center">
+            <p class="text-bg-zinc-600">Currently Reading</p>
+            <p class="text-bg-zinc-600">{{ bookshelf.currently_reading }}</p>
+          </div>
+          <div class="flex flex-col text-center">
+            <p class="text-bg-zinc-600">Already Read</p>
+            <p class="text-bg-zinc-600">{{ bookshelf.already_read }}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="bookDetails.description" class="mt-4">
+        <h3 class="text-lg font-bold text-pink-400">
+          Description
+          <hr class="border-b-1 border-pink-300">
+        </h3>
+        <div class="flex m-4 bg-pink-50 rounded-lg p-5">
+          <p>{{ bookDetails.description }}</p>
+        </div>
+      </div>
+      <div *ngIf="bookDetails.subjects && bookDetails.subjects.length > 0" class="mt-4">
+        <h3 class="text-lg font-bold text-pink-400">
+          Subjects
+          <hr class="border-b-1 border-pink-300">
+        </h3>
+        <div class="flex m-4 bg-pink-50 rounded-lg p-5">
+          <p>{{ bookDetails.subjects.join(', ') }}</p>
+        </div>
+      </div>      
+    </div>
   </div>
 </div>
 
-<div *ngIf="bookshelf">
-  <h3>Bookshelf</h3>
-  <p>Want to Read: {{ bookshelf.want_to_read }}</p>
-  <p>Currently Reading: {{ bookshelf.currently_reading }}</p>
-  <p>Already Read: {{ bookshelf.already_read }}</p>
-</div>
-
-<div *ngIf="!bookDetails && authors.length === 0 && !bookshelf && !ratings">
-  <p>Loading...</p>
+<div *ngIf="!bookDetails && authors.length === 0 && !bookshelf && !ratings" class="flex items-center justify-center h-screen">
+  <p class="text-4xl font-bold text-pink-400">Loading...</p>
 </div>
