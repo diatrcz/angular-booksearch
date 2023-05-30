@@ -1,24 +1,43 @@
-<div class="search-container">
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="searchQuery" placeholder="Kulcsszavak">
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="searchBooks()">Keresés</button>
-</div>
-
-<div class="results-container">
-  <a *ngFor="let book of searchResults" class="book-link" [routerLink]="['/book-details', book.key]">
-    <mat-card class="book-item">
-      <img *ngIf="book.coverId" [src]="'https://covers.openlibrary.org/b/id/' + book.coverId + '-L.jpg'" alt="Borítókép">
-      <div class="book-details">
-        <h3>{{ book.title }}</h3>
-        <p *ngIf="book.authorName">Szerző: <span *ngFor="let author of book.authorName">{{ book.authorName }}</span></p>
-        <p *ngIf="book.firstPublishYear">Első kiadás éve: {{ book.firstPublishYear }}</p>
-        <p *ngIf="book.publisher">Kiadó: {{ book.publisher }}</p>
-        <p *ngIf="book.description">{{ book.description }}</p>
-        <p class="more-info" (click)="viewBookDetails(book.key)">További információ...</p>
+<nav class="flex items-center justify-between bg-pink-300 py-2 px-3">
+  <div class="flex items-center justify-center flex-shrink-0 text-white mr-4">
+    <span class="font-semibold text-lg tracking-tight text-center pl-5">Library</span>
+  </div>  
+  <div class="w-full flex-grow flex items-center mt-4">
+    <div class="flex-grow">
+      <div class="flex justify-end items-center">
+        <select class="mr-1 rounded-lg bg-pink-500 text-white py-1 px-2 text-sm h-full focus:border-pink-500">
+          <option value="searchByAnything">Search by anything</option>
+          <option value="searchByAuthor">Search by author</option>
+          <option value="searchByTitle">Search by title</option>
+        </select>
+        <input class="mr-1 p-1 rounded-lg bg-pink-100 text-sm focus:border-pink-500" type="text" [(ngModel)]="searchQuery" placeholder="Keywords" (keyup.enter)="searchBooks()">
+        <button class="bg-pink-500 text-white font-bold py-1 px-2 rounded-lg text-sm" (click)="searchBooks()">Search</button>
       </div>
-    </mat-card>
-  </a>
+    </div>
+  </div>
+</nav>
+
+<div class="bg-pink-50 p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <a *ngFor="let book of searchResults" class="book-link" [routerLink]="['/book-details', book.key]">
+      <div class="card-container bg-white rounded-lg shadow-md h-64 flex">
+        <div class="w-1/4 flex items-center justify-center">
+          <div class="h-full w-32 bg-gray-100 flex items-center justify-center">
+            <img *ngIf="book.coverId" [src]="'https://covers.openlibrary.org/b/id/' + book.coverId + '-L.jpg'" alt="Borítókép" class="max-h-full max-w-full object-contain p-2">
+          </div>
+        </div>
+        <div class="p-4 pt-10 flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-pink-300">{{ book.title }}</h3>
+            <p *ngIf="book.authorName"><span *ngFor="let author of book.authorName">{{ author }}</span></p>
+            <p *ngIf="book.firstPublishYear">{{ book.firstPublishYear }}</p>
+            <p *ngIf="book.publisher">{{ book.publisher }}</p>
+            <p *ngIf="book.description">{{ book.description }}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
 </div>
 
 <router-outlet></router-outlet>

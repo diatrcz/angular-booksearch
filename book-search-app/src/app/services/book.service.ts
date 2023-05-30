@@ -16,6 +16,16 @@ export class BookService {
     return this.http.get(url);
   }
 
+  searchBooksByTitle(query: string): Observable<any> {
+    const url = `${this.url}/search.json?title=${query}`;
+    return this.http.get(url);
+  }
+
+  searchBooksByAuthor(query: string): Observable<any> {
+    const url = `${this.url}/search.json?author=${query}`;
+    return this.http.get(url);
+  }
+
   getBookDetails(bookKey: string): Observable<any> {
     const url = `${this.url}${bookKey}.json`;
     return this.http.get(url);

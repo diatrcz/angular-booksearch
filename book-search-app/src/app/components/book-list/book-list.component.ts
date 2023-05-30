@@ -11,14 +11,27 @@ import { Book } from '../../models/book.type';
 export class BookListComponent {
   searchQuery: string = '';
   searchResults: Book[] = [];
+  selectedOption: string = 'searchByAnything';
 
   constructor(private router: Router, private bookService: BookService) { }
 
   searchBooks(): void {
-    if (this.searchQuery.trim() !== '') {
-      this.bookService.searchBooks(this.searchQuery).subscribe(response => {
-        this.searchResults = response.docs.map((book: any) => this.toBook(book));
-      });
+    if(this.searchQuery.trim() !== '') {
+      if(this.selectedOption === 'searchByAnything') {
+        this.bookService.searchBooks(this.searchQuery).subscribe(response => {
+          this.searchResults = response.docs.map((book: any) => this.toBook(book));
+        });
+      }
+      else if(this.selectedOption === 'searchByAuthor') {
+        this.bookService.searchBooksByAuthor(this.searchQuery).subscribe(response => {
+          this.searchResults = response.docs.map((book: any) => this.toBook(book));
+        });
+      }
+      else if(this.selectedOption === 'searchByTitle') {
+        this.bookService.searchBooksByTitle(this.searchQuery).subscribe(response => {
+          this.searchResults = response.docs.map((book: any) => this.toBook(book));
+        });
+      }
     }
   }
 
