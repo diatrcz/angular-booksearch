@@ -1,3 +1,6 @@
+/**
+ * Represents the basic details you can get from the work's json file about the book.
+ */
 export interface BookDetails {
     key: string;
     title: string;

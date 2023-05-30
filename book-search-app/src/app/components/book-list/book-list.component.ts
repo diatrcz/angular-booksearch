@@ -15,6 +15,14 @@ export class BookListComponent {
 
   constructor(private router: Router, private bookService: BookService) { }
 
+  /**
+   * Calls one of the service's search functions based on which option is selected.
+   * searcByAnything -> searchBooks
+   * searchByAuthor -> searchBooksByAuthor
+   * search-byTitle -> searchBooksByTitle
+   * goes through the results and calls the toBook function on each so it can be passed
+   * to the searchResults variable
+   */
   searchBooks(): void {
     if(this.searchQuery.trim() !== '') {
       if(this.selectedOption === 'searchByAnything') {
@@ -35,12 +43,21 @@ export class BookListComponent {
     }
   }
 
+  /**
+   * Navigates to the bookdetails page using rotuing.
+   * @param key the book id that gets passed to the bookdetails page
+   */
   viewBookDetails(key: string): void {
     if (key) {
       this.router.navigate(['/book-details', key]);
     }
   }
 
+  /**
+   * Gets the useful information from the data and return them int a Book object.
+   * @param data The response from the service provider
+   * @returns a Book object
+   */
   private toBook(data: any): Book {
     return {
       key: data.key,
